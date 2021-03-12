@@ -1,0 +1,6 @@
+spring:
+  main:
+    banner-mode: OFF
+kafka-consumer:
+  bootstrap-servers: localhost:9092
+  topic: records

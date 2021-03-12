@@ -1,0 +1,7 @@
+spring:
+  main:
+    banner-mode: OFF
+kafka-producer:
+  bootstrap-servers: kafka:29092
+  topic: records
+  interval: PT2S
