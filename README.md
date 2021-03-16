@@ -12,8 +12,12 @@ docker exec -it kafka /usr/bin/kafka-topics --bootstrap-server kafka:29092 --cre
 # start producer
 docker-compose up -d producer
 # start 2 consumers
-docker-compose up -d consumer --scale consumer=2
+docker-compose up -d --scale consumer=2
 # checks logs
 docker-compose logs -f consumer
 # notice an id is not consumed by both consumers
+# play by stopping one of the container and notice the other container takes all the messages
+docker stop poc-kafka-partition_consumer_2
+# when restarting the container, notice it will refetch the message from its group id
+docker start poc-kafka-partition_consumer_2
 ```
