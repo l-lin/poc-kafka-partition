@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,6 +26,8 @@ public class MessageProducer implements CommandLineRunner {
             .collect(Collectors.toList());
 
     private final KafkaProducer<String, String> kafkaProducer;
+
+    private final AtomicInteger index = new AtomicInteger();
 
     private final String topic;
 
@@ -45,10 +48,11 @@ public class MessageProducer implements CommandLineRunner {
     }
 
     private void sendMessage() throws ExecutionException, InterruptedException {
-        int index = RANDOM.nextInt(IDS.size());
-        String id = IDS.get(index);
+        int idIndex = RANDOM.nextInt(IDS.size());
+        String id = IDS.get(idIndex);
         LOGGER.info("Sending message {}", id);
-        ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topic, id, id);
+        ProducerRecord<String, String> producerRecord =
+                new ProducerRecord<>(topic, id, Integer.toString(index.getAndIncrement()));
         kafkaProducer.send(producerRecord).get();
     }
 }
